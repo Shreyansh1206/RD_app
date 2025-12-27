@@ -1,0 +1,192 @@
+/* Import Elegant Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600&display=swap");
+
+/* Main Wrapper */
+.landing-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: "Poppins", sans-serif;
+  background-color: #f8f9fa;
+  overflow-x: hidden;
+}
+
+/* --- 1. Hero Section --- */
+.hero-section {
+  background: transparent;
+  padding: 60px 20px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #1e293b;
+  position: relative;
+  width: 100%;
+}
+
+.hero-content {
+  margin-bottom: 20px;
+  animation: fadeInDown 0.8s ease-out;
+}
+
+.hero-title {
+  font-family: "Playfair Display", serif;
+  font-size: 4rem;
+  margin: 0;
+  letter-spacing: -1px;
+  word-spacing: 15px;
+  color: #1e293b;
+}
+
+.hero-tagline {
+  font-size: 1.1rem;
+  color: #64748b;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+/* --- 2. Content Section --- */
+.content-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  margin-top: 0;
+  padding: 0 20px 60px;
+  z-index: 10;
+  width: 100%;
+}
+
+.selector-card {
+  background: white;
+  width: 100%;
+  max-width: 500px;
+  height: fit-content;
+  padding: 40px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  animation: fadeInUp 0.8s ease-out 0.2s backwards;
+}
+
+.card-heading {
+  margin: 0 0 10px 0;
+  color: #1e293b;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.card-subtext {
+  color: #64748b;
+  margin-bottom: 30px;
+  font-size: 0.95rem;
+}
+
+/* --- Input Styling --- */
+.input-group {
+  margin-bottom: 25px;
+  text-align: left;
+}
+
+.grand-select {
+  width: 100%;
+  padding: 16px 20px;
+  font-size: 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  background-color: #fff;
+  color: #334155;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23334155' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1.2em;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.grand-select:focus {
+  border-color: #1e3a8a;
+  box-shadow: 0 0 0 4px rgba(30, 58, 138, 0.1);
+}
+
+/* --- Button Styling --- */
+.grand-btn {
+  width: 100%;
+  padding: 18px;
+  background-color: #1e3a8a;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+}
+
+.grand-btn:hover {
+  background-color: #172554;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px -5px rgba(30, 58, 138, 0.3);
+}
+
+.grand-btn:disabled {
+  background-color: #cbd5e1;
+  color: #94a3b8;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Footer */
+.landing-footer {
+  text-align: center;
+  padding: 20px;
+  color: #94a3b8;
+  font-size: 0.8rem;
+  margin-top: auto;
+}
+
+/* --- Animations --- */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  .hero-section {
+    height: auto;
+  }
+  .selector-card {
+    padding: 30px 20px;
+    margin-top: 0;
+  }
+  .grand-btn {
+    padding: 15px;
+  }
+}

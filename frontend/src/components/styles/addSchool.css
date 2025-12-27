@@ -1,0 +1,111 @@
+/* General Layout & Background */
+.add-school-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f3f4f6; /* Light gray background */
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* The Card Component */
+.add-school-card {
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 500px; /* Limits width on large screens */
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Typography */
+.form-title {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #1f2937;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+/* Error Banner */
+.error-banner {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  text-align: center;
+  border: 1px solid #fecaca;
+}
+
+/* Form Group Layout */
+.form-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Labels */
+.form-label {
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.95rem;
+}
+
+.required-star {
+  color: #dc2626; /* Red asterisk */
+  margin-left: 2px;
+}
+
+/* Input Fields (Text & File) */
+.form-input {
+  padding: 12px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background-color: #fff;
+}
+
+/* Focus State for Inputs */
+.form-input:focus {
+  outline: none;
+  border-color: #4f46e5; /* Indigo focus color */
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* File Input Specific Adjustments */
+input[type="file"].form-input {
+  padding: 10px; /* Adjusting purely for the file input look */
+  background-color: #f9fafb;
+  cursor: pointer;
+}
+
+/* Submit Button */
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  background-color: #4f46e5; /* Primary Indigo */
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 10px;
+}
+
+.submit-btn:hover {
+  background-color: #4338ca; /* Darker Indigo on hover */
+}
+
+/* Disabled/Loading State */
+.submit-btn:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.8;
+}

@@ -1,0 +1,171 @@
+/* src/SchoolDashboard.css */
+
+/* --- Navigation --- */
+.back-link {
+  text-decoration: none;
+  color: #666;
+  font-weight: 500;
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+/* --- Landing Page Layout --- */
+.school-landing {
+  text-align: center;
+  margin-top: 40px;
+  animation: fadeIn 0.5s ease-in;
+}
+
+.logo-container { margin-bottom: 20px; }
+
+.school-logo {
+  width: 150px; height: 150px; object-fit: contain;
+  border-radius: 50%;
+}
+
+.location-text {
+  color: #666; font-size: 1.2rem; margin-top: -10px;
+}
+
+/* --- Season Buttons --- */
+.season-selection {
+  margin-top: 50px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;
+}
+
+.season-btn {
+  padding: 30px 50px; font-size: 1.5rem; font-weight: bold;
+  border-radius: 15px; cursor: pointer; border: none; min-width: 220px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.season-btn:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+
+.season-btn.summer { background-color: #ffeaa7; color: #d35400; border: 2px solid #fdcb6e; }
+.season-btn.winter { background-color: #74b9ff; color: #0984e3; border: 2px solid #0984e3; }
+.season-btn.all { background-color: #dfe6e9; color: #2d3436; border: 2px solid #b2bec3; }
+
+/* --- Shop View Header --- */
+.shop-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin: 20px 0; border-bottom: 1px solid #eee; padding-bottom: 10px;
+}
+
+.back-btn {
+  padding: 8px 16px; background-color: transparent; border: 1px solid #ccc;
+  border-radius: 6px; cursor: pointer; color: #555;
+}
+.back-btn:hover { background-color: #f1f1f1; }
+
+.action-btn {
+  padding: 8px 16px; background-color: #6c5ce7; color: white;
+  border: none; border-radius: 6px; cursor: pointer;
+  display: flex; align-items: center; gap: 5px; transition: background 0.2s;
+}
+.action-btn:hover { background-color: #5b4cc4; }
+
+/* --- Price Section inside Cards --- */
+.price-section {
+  margin-top: 10px; font-size: 0.9em; border-top: 1px dashed #eee; padding-top: 10px;
+}
+.price-row { display: flex; justify-content: space-between; padding: 2px 0; }
+.single-price { font-weight: bold; font-size: 1.2em; color: #2c3e50; }
+.empty-state { text-align: center; padding: 40px; color: #999; font-style: italic; }
+
+/* --- MODAL STYLES --- */
+.modal-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.6); display: flex; justify-content: center; align-items: center;
+  z-index: 1000; animation: fadeIn 0.2s ease-out;
+}
+
+.modal-content {
+  background: white; width: 90%; max-width: 800px; border-radius: 12px;
+  position: relative; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+  animation: slideUp 0.3s ease-out; max-height: 90vh; overflow-y: auto;
+}
+
+.close-btn {
+  position: absolute; top: 15px; right: 20px; background: none; border: none;
+  font-size: 2rem; cursor: pointer; color: #555; z-index: 10;
+}
+
+.modal-body { display: flex; flex-wrap: wrap; }
+.modal-image {
+  flex: 1; min-width: 300px; background: #f8f9fa; padding: 20px;
+  display: flex; justify-content: center; align-items: center;
+}
+.modal-image img { max-width: 100%; max-height: 350px; object-fit: contain; border-radius: 8px; }
+
+.modal-info { flex: 1.2; padding: 30px; min-width: 300px; }
+
+.school-badge {
+  background: #e3f2fd; color: #1565c0; padding: 4px 8px;
+  border-radius: 4px; font-size: 0.85rem; font-weight: bold; text-transform: uppercase;
+  display: inline-block; /* Changed to block for alignment */
+}
+.modal-desc { color: #666; margin: 15px 0; line-height: 1.5; }
+
+.tag-season { background: #ffeaa7; padding: 3px 8px; border-radius: 4px; margin-right: 5px; font-size: 0.85rem; }
+.tag-grey { background: #eee; padding: 3px 8px; border-radius: 4px; margin-right: 5px; font-size: 0.85rem; }
+
+.modal-pricing { margin-top: 20px; background: #fafafa; padding: 15px; border-radius: 8px; border: 1px solid #eee; }
+.price-row-large { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #ddd; }
+.price-row-large:last-child { border-bottom: none; }
+.price-bold { font-weight: bold; color: #2c3e50; font-size: 1.1rem; }
+
+/* --- Collage Specifics --- */
+.collage-modal { max-width: 1000px; padding: 30px; }
+.collage-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; max-height: 70vh; overflow-y: auto; }
+
+.collage-item {
+  position: relative; width: 200px; height: 200px; border-radius: 8px;
+  overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.1); transition: transform 0.2s;
+}
+.collage-item:hover { transform: scale(1.05); z-index: 5; }
+.collage-item img { width: 100%; height: 100%; object-fit: cover; }
+.collage-label {
+  position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0, 0, 0, 0.7);
+  color: white; text-align: center; padding: 5px 0; font-size: 0.9rem;
+}
+
+/* Animations */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+/* --- NEW: Modal Actions (Edit/Delete) --- */
+.modal-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.edit-modal-btn {
+  background: #f1f2f6; 
+  color: #2f3542; 
+  border: 1px solid #ced6e0; 
+  padding: 6px 12px; 
+  border-radius: 4px; 
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.edit-modal-btn:hover { background: #dfe4ea; }
+
+.delete-modal-btn {
+  background: #ffeaa7; 
+  color: #d63031; 
+  border: 1px solid #fab1a0; 
+  padding: 6px 12px; 
+  border-radius: 4px; 
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.delete-modal-btn:hover { background: #ff7675; color: white; border-color: #ff7675; }
