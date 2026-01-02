@@ -98,8 +98,10 @@
 .card img {
   width: 100%;
   height: 220px;
-  object-fit: cover;
-  background: #f9f9f9;
+  object-fit: contain; /* CHANGED: Ensures full image is visible */
+  background: #ffffff; /* CHANGED: White background for clean look */
+  padding: 10px; /* ADDED: Breathing room */
+  box-sizing: border-box;
 }
 
 .card-info {
