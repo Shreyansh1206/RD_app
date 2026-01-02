@@ -15,6 +15,23 @@ body {
   padding: 20px;
 }
 
+/* --- Dashboard Layout (Robust Zoom Support) --- */
+.dashboard-layout {
+  display: flex;
+  height: calc(100vh - 6rem); /* Subtract Navbar Height */
+  width: 100vw;
+  overflow: hidden; /* Prevent window scroll */
+}
+
+.dashboard-main {
+  flex: 1; /* Take remaining width */
+  height: 100%;
+  overflow-y: auto; /* Internal scrolling */
+  padding-top: 0;
+  width: 100%;
+  position: relative;
+}
+
 /* --- Shared Components (Used in multiple places) --- */
 
 /* 1. School Selector Box */

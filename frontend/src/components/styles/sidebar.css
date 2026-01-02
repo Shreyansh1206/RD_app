@@ -2,13 +2,11 @@
 .sidebar-container {
   /* CHANGE 1: Made sidebar wider */
   width: 300px;
+  min-width: 300px; /* Prevent shrinking */
+  height: 100%; /* Fill flex container */
 
-  /* Matches your Navbar height */
-  top: 6rem;
-  height: calc(100vh - 6rem);
-
-  position: fixed;
-  left: 0;
+  /* Removed fixed positioning - Now part of flex flow */
+  position: relative;
   background-color: #ffffff;
   border-right: 1px solid #e5e7eb;
   display: flex;
@@ -16,8 +14,6 @@
   z-index: 50;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.03);
   font-family: "Poppins", sans-serif;
-
-  /* CRITICAL: Ensures padding is included in width calculations */
   box-sizing: border-box;
 }
 

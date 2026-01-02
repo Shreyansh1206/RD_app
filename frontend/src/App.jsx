@@ -44,17 +44,10 @@ const DashboardLayout = () => {
     <>
       <Navbar />
       {/* Layout Container: Fixed height, no window scroll */}
-      <div style={{ display: 'flex', height: 'calc(100vh - 6rem)', overflow: 'hidden' }}>
+      {/* Layout Container: Fixed height, no window scroll */}
+      <div className="dashboard-layout">
         <Sidebar />
-        <main className="main-content" style={{ 
-          flex: 1, 
-          marginLeft: '260px', 
-          paddingTop: '0px', 
-          width: '100%',
-          /* Internal Scrolling Logic */
-          height: '100%', 
-          overflowY: 'auto', 
-        }}>
+        <main className="dashboard-main">
           <Outlet />
         </main>
       </div>
