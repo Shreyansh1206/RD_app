@@ -6,16 +6,16 @@ const upload = require('../middleware/upload')
 
 // GET all uniforms for a SPECIFIC School
 // Example usage: /api/uniforms/64f8a... (school ID)
-router.get('/', uniformController.uniform_list);
+router.get('/', uniformController.uniformList);
 
 router.post('/', upload.single('uniformImage'), uniformController.createUniform);
 
 router.get('/school/:schoolId', uniformController.listUniformsBySchool);
 
-router.get('/:id', uniformController.getUniformById);
+router.get('/:uniformId', uniformController.getUniformById);
 
-router.patch('/:id', upload.single('image'), uniformController.updateUniform);
+router.patch('/:uniformId', upload.single('image'), uniformController.updateUniform);
 
-router.delete('/:id', uniformController.deleteUniform);
+router.delete('/:uniformId', uniformController.deleteUniform);
 
 module.exports = router;

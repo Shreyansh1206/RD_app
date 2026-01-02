@@ -1,249 +1,253 @@
-/* Container Layout */
-.school-list-container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 40px 20px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+/* --- PAGE LAYOUT --- */
+.sl-page-wrapper {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    padding: 30px 40px;
+    font-family: 'Segoe UI', sans-serif;
+    color: #333;
+    
+    margin-left: 20px; 
+    border-top-left-radius: 16px;
+    border-bottom-left-radius: 16px;
 }
 
-/* Header Section */
-.list-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
+/* Header Area */
+.sl-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap; 
+    gap: 20px;
 }
 
-.page-title {
-  font-size: 2rem;
-  color: #1f2937;
-  margin: 0;
+.header-titles h1 {
+    font-size: 1.8rem;
+    color: #1a202c;
+    margin: 0 0 5px 0;
+    font-weight: 700;
 }
 
-.add-school-btn {
-  background-color: #4f46e5;
-  color: white;
-  text-decoration: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: background-color 0.2s;
+.subtitle { color: #64748b; font-size: 0.95rem; margin: 0; }
+
+/* Actions Area */
+.sl-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 1;
+    justify-content: flex-end; 
+    min-width: 300px;
 }
 
-.add-school-btn:hover {
-  background-color: #4338ca;
+.sl-search-input {
+    padding: 10px 15px;
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    width: 100%;
+    max-width: 350px; 
+    transition: all 0.2s;
+    background-color: white;
 }
 
-/* Search Bar */
-.search-bar-wrapper {
-  margin-bottom: 25px;
+.sl-search-input:focus {
+    border-color: #4f46e5;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
 }
 
-.search-input {
-  width: 100%;
-  padding: 12px 16px;
-  font-size: 1rem;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  box-sizing: border-box; /* Ensures padding doesn't affect width */
+.btn-add-school {
+    background-color: #4f46e5;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+    box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
+    white-space: nowrap;
+}
+.btn-add-school:hover { background-color: #4338ca; transform: translateY(-1px); }
+
+/* --- GRID LAYOUT --- */
+.sl-content-area {
+    display: flex; flex-direction: column; gap: 40px; padding-bottom: 40px;
 }
 
-.search-input:focus {
-  outline: none;
-  border-color: #4f46e5;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+.sl-grid {
+    display: grid;
+    /* Responsive grid logic */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
 }
 
-/* List Items */
-.school-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+/* --- CARD STYLING --- */
+.sl-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column; 
+    justify-content: space-between; 
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    min-height: 200px; /* Slightly taller for monogram */
+    cursor: pointer;
 }
 
-.school-item {
-  background-color: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  padding: 15px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease;
+.sl-card:hover {
+    box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1);
+    transform: translateY(-3px);
+    border-color: #cbd5e1;
 }
 
-.school-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+.sl-card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content */
+    text-align: center;
+    gap: 15px;
+    margin-bottom: 20px;
 }
 
-/* Left Side: Info & Monogram */
-.school-info {
-  display: flex;
-  align-items: center;
-  gap: 15px;
+/* Monogram Styling */
+.sl-monogram-wrapper {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e5e7eb;
 }
 
-.monogram-wrapper {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  overflow: hidden;
-  background-color: #f3f4f6;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid #e5e7eb;
+.sl-monogram-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-.school-monogram {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.sl-monogram-placeholder {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #9ca3af;
+    text-transform: uppercase;
 }
 
-.monogram-placeholder {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #9ca3af;
-  text-transform: uppercase;
+/* School Info */
+.sl-school-name {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #111827;
+    font-weight: 700;
 }
 
-.school-details {
-  display: flex;
-  flex-direction: column;
+.sl-school-location {
+    margin: 5px 0 0 0;
+    font-size: 0.9rem;
+    color: #6b7280;
 }
 
-.school-name {
-  margin: 0;
-  font-size: 1.1rem;
-  color: #111827;
+/* Card Actions */
+.sl-card-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: auto;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 15px;
 }
 
-.school-location {
-  margin: 4px 0 0 0;
-  font-size: 0.9rem;
-  color: #6b7280;
+.btn-action {
+    padding: 8px 0;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+    text-align: center;
 }
 
-/* Right Side: Actions */
-.school-actions {
-  display: flex;
-  gap: 12px;
-  align-items: center;
+.btn-action.edit {
+    background-color: #f8fafc;
+    border-color: #cbd5e1;
+    color: #475569;
+}
+.btn-action.edit:hover {
+    background-color: #fff;
+    border-color: #4f46e5;
+    color: #4f46e5;
 }
 
-.action-btn {
-  padding: 0 16px; /* Use padding for width, height is fixed */
-  border: none;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 38px;
-  margin: 0; /* Remove default margins */
-  line-height: 1; /* Normalize line height */
+.btn-action.delete {
+    background-color: #fff1f2;
+    color: #be123c;
+    border-color: #fecdd3;
+}
+.btn-action.delete:hover {
+    background-color: #ffe4e6;
+    border-color: #fda4af;
+    color: #9f1239;
 }
 
-.edit-btn {
-  background-color: #e0e7ff;
-  color: #4f46e5;
+/* --- STATES --- */
+.empty-state-row {
+    text-align: center; padding: 60px;
+    background: white; border-radius: 12px; border: 2px dashed #e2e8f0; color: #64748b;
+}
+.link-create { color: #4f46e5; font-weight: 600; text-decoration: none; margin-left: 5px; }
+.link-create:hover { text-decoration: underline; }
+.sl-loading { display: flex; justify-content: center; padding-top: 50px; color: #64748b; font-size: 1.2rem; }
+.sl-error-banner { background: #fee2e2; color: #c53030; padding: 12px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #feb2b2; }
+
+/* --- MODAL STYLES --- */
+.sl-modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease-out;
 }
 
-.edit-btn:hover {
-  background-color: #c7d2fe;
-  transform: translateY(-1px);
+.sl-modal-card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.2);
 }
 
-.delete-btn {
-  background-color: #fee2e2;
-  color: #ef4444;
-}
+.sl-modal-card h3 { margin-top: 0; color: #1f2937; }
 
-.delete-btn:hover {
-  background-color: #fecaca;
-  transform: translateY(-1px);
-}
-
-/* --- Modal Overlay --- */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Dim background */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  animation: fadeIn 0.2s ease-in-out;
-}
-
-.modal-card {
-  background: white;
-  padding: 30px;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 400px;
-  text-align: center;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-}
-
-.modal-card h3 {
-  margin-top: 0;
-  color: #1f2937;
-}
-
-.modal-actions {
-  margin-top: 25px;
-  display: flex;
-  justify-content: center;
-  gap: 15px;
+.sl-modal-actions {
+    margin-top: 25px;
+    display: flex; justify-content: center; gap: 15px;
 }
 
 .modal-btn {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
+    padding: 10px 20px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;
 }
+.modal-btn.cancel { background: #e5e7eb; color: #374151; }
+.modal-btn.cancel:hover { background: #d1d5db; }
+.modal-btn.confirm { background: #dc2626; color: white; }
+.modal-btn.confirm:hover { background: #b91c1c; }
 
-.modal-btn.cancel {
-  background-color: #e5e7eb;
-  color: #374151;
-}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-.modal-btn.confirm {
-  background-color: #dc2626;
-  color: white;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-/* Utility Text */
-.loading-text,
-.error-text,
-.empty-state {
-  text-align: center;
-  color: #6b7280;
-  margin-top: 20px;
-}
-.error-text {
-  color: #dc2626;
+/* Responsive */
+@media (max-width: 768px) {
+    .sl-header { flex-direction: column; align-items: stretch; }
+    .sl-header-actions { flex-direction: column; width: 100%; }
+    .sl-search-input { max-width: none; }
+    .btn-add-school { width: 100%; text-align: center; }
+    .sl-page-wrapper { margin-left: 0; padding: 20px; border-radius: 0; }
+    .sl-grid { grid-template-columns: 1fr; }
 }

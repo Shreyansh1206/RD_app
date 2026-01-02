@@ -14,9 +14,17 @@ const extractPublicId = (url) => {
   return match ? match[1] : null;
 };
 
-const deleteFromCloudinary = async (publicId) => {
+const deleteFromCloudinary = async (identifier) => {
   try {
-    if (!publicId) return;
+    if (!identifier) return;
+
+    // Check if it's a URL and extract ID, otherwise treat as ID
+    const publicId = identifier.startsWith('http') ? extractPublicId(identifier) : identifier;
+
+    if (!publicId) {
+       console.warn("Cloudinary Delete Skipped: Could not extract publicId from:", identifier);
+       return;
+    }
 
     const result = await cloudinary.uploader.destroy(publicId);
     console.log("Cloudinary Delete Result:", result);

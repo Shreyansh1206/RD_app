@@ -1,24 +1,23 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useAlert } from '../context/alertContext';
 import './styles/editSchool.css';
 
 const EditSchool = () => {
   const navigate = useNavigate();
   const { schoolId } = useParams();
+  const { showAlert } = useAlert();
   
   // State for text fields
   const [name, setName] = useState('');
   const [location, setLocation] = useState('');
-  // State for the file (initialized as null)
-  const [bannerImage, setBannerImage] = useState(null);
-  const [currentBanner, setCurrentBanner] = useState('');
-
+  
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
 
-  // Fetch school data on mount
+  // --- FETCH DATA ---
   useEffect(() => {
     const fetchSchool = async () => {
       try {
@@ -26,7 +25,6 @@ const EditSchool = () => {
         const school = res.data;
         setName(school.name);
         setLocation(school.location);
-        setCurrentBanner(school.bannerImage);
       } catch (err) {
         console.error("Error fetching school:", err);
         setError("Failed to load school details.");
@@ -40,35 +38,30 @@ const EditSchool = () => {
     }
   }, [schoolId]);
 
-  // Handle File Selection
-  const handleFileChange = (e) => {
-    // Save the file object itself, not a string
-    setBannerImage(e.target.files[0]);
-  };
-
+  // --- SUBMIT HANDLER ---
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
-    try {
-      // 1. Create FormData object
-      const formData = new FormData();
-      formData.append('name', name);
-      formData.append('location', location);
-      
-      // Only append if a file was actually selected
-      if (bannerImage) {
-        // 'bannerImage' is the key your backend middleware expects
-        formData.append('bannerImage', bannerImage); 
-      }
+    if (!name.trim()) {
+        setError("School Name is required.");
+        setLoading(false);
+        return;
+    }
 
-      // 2. Send PATCH request
-      const res = await axios.patch(`/api/schools/${schoolId}`, formData);
+    try {
+      const schoolData = {
+        name: name,
+        location: location
+      };
+
+      // PATCH Request to update
+      const res = await axios.patch(`/api/schools/${schoolId}`, schoolData);
       
       console.log("School Updated:", res.data);
-      alert('School Updated Successfully!');
-      navigate('/school'); // Navigate back to list or dashboard
+      await showAlert('School Updated Successfully!', 'Success');
+      navigate(-1); 
 
     } catch (err) {
       console.error("Update Error:", err);
@@ -84,64 +77,48 @@ const EditSchool = () => {
     }
   };
 
-  if (initialLoading) return <div className="loading">Loading...</div>;
+  if (initialLoading) return <div className="es-loading">Loading School Details...</div>;
 
   return (
-    <div className="edit-school-container">
-      <div className="edit-school-card">
-        <h2 className="form-title">Edit School</h2>
-        
-        {error && <div className="error-banner">⚠️ {error}</div>}
-
-        <form onSubmit={handleSubmit}>
-          {/* Name Field */}
-          <div className="form-group">
-            <label className="form-label">School Name <span className="required-star">*</span></label>
-            <input 
-              type="text" 
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. St. Xavier's High School"
-              required 
-              className="form-input"
-            />
-          </div>
-
-          {/* Location Field */}
-          <div className="form-group">
-            <label className="form-label">Location</label>
-            <input 
-              type="text" 
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              placeholder="e.g. New Delhi"
-              className="form-input"
-            />
-          </div>
-
-          {/* Banner Image Upload */}
-          <div className="form-group">
-            <label className="form-label">Banner Image</label>
-            {currentBanner && !bannerImage && (
-              <div className="current-banner-preview">
-                <p>Current Banner:</p>
-                <img src={currentBanner} alt="Current Banner" style={{maxWidth: '100%', maxHeight: '150px', objectFit: 'cover'}} />
-              </div>
-            )}
-            <input 
-              type="file" 
-              accept="image/*"
-              onChange={handleFileChange}
-              className="form-input"
-            />
-          </div>
-
-          <div className="button-group">
-            <button type="submit" disabled={loading} className="submit-btn">
-              {loading ? 'Updating...' : 'Update School'}
+    <div className="es-page-wrapper">
+      <div className="es-header">
+        <h1>Edit School</h1>
+        <div className="es-actions">
+            <button className="btn-cancel" onClick={() => navigate(-1)}>Cancel</button>
+            <button className="btn-save" onClick={handleSubmit} disabled={loading}>
+                {loading ? 'Updating...' : 'Update School'}
             </button>
-          </div>
-        </form>
+        </div>
+      </div>
+
+      {error && <div className="es-error-banner"> {error}</div>}
+
+      <div className="es-grid-layout">
+        <div className="es-card">
+            <h3>School Details</h3>
+            
+            <div className="es-form-group">
+                <label>School Name <span className="req">*</span></label>
+                <input 
+                    type="text" 
+                    className="es-input"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="e.g. St. Xavier's High School"
+                />
+            </div>
+
+            <div className="es-form-group">
+                <label>Location</label>
+                <input 
+                    type="text" 
+                    className="es-input"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    placeholder="e.g. New Delhi"
+                />
+            </div>
+        </div>
       </div>
     </div>
   );

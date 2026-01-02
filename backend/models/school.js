@@ -7,10 +7,6 @@ const schoolSchema = new mongoose.Schema({
     unique: true 
   },
   location: {type: String, default: ""}, 
-  bannerImage: { 
-    type: String, 
-    default: "" //Cloudinary URL here
-  } 
 });
 
 module.exports = mongoose.model('School', schoolSchema);

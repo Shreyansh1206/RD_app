@@ -1,171 +1,586 @@
-/* src/SchoolDashboard.css */
+/* src/styles/schoolDashboard.css */
 
-/* --- Navigation --- */
-.back-link {
-  text-decoration: none;
-  color: #666;
-  font-weight: 500;
-  display: inline-block;
-  margin-bottom: 1rem;
+/* --- Layout --- */
+.container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: "Segoe UI", sans-serif;
 }
 
-/* --- Landing Page Layout --- */
-.school-landing {
-  text-align: center;
-  margin-top: 40px;
-  animation: fadeIn 0.5s ease-in;
+.dashboard-header {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
 }
 
-.logo-container { margin-bottom: 20px; }
-
-.school-logo {
-  width: 150px; height: 150px; object-fit: contain;
-  border-radius: 50%;
+.school-identity h1 {
+  margin: 10px 0 5px;
+  color: #2c3e50;
+}
+.school-identity p {
+  color: #7f8c8d;
+  margin: 0;
 }
 
-.location-text {
-  color: #666; font-size: 1.2rem; margin-top: -10px;
+/* --- FILTER BAR --- */
+.filter-bar {
+  display: flex;
+  gap: 20px;
+  background: #f8f9fa;
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  align-items: flex-end;
+  flex-wrap: wrap;
 }
 
-/* --- Season Buttons --- */
-.season-selection {
-  margin-top: 50px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
-.season-btn {
-  padding: 30px 50px; font-size: 1.5rem; font-weight: bold;
-  border-radius: 15px; cursor: pointer; border: none; min-width: 220px;
+.filter-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #555;
+  text-transform: uppercase;
+}
+
+.filter-group select {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  min-width: 160px;
+  font-size: 0.95rem;
+  background: white;
+  cursor: pointer;
+}
+
+.clear-filters-btn {
+  padding: 8px 16px;
+  background: none;
+  border: 1px solid #e74c3c;
+  color: #e74c3c;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-left: auto; /* Pushes to right */
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+.clear-filters-btn:hover {
+  background: #e74c3c;
+  color: white;
+}
+
+/* --- CARDS & GRID --- */
+.item-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 25px;
+}
+
+.card {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid #eee;
 }
-.season-btn:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
-
-.season-btn.summer { background-color: #ffeaa7; color: #d35400; border: 2px solid #fdcb6e; }
-.season-btn.winter { background-color: #74b9ff; color: #0984e3; border: 2px solid #0984e3; }
-.season-btn.all { background-color: #dfe6e9; color: #2d3436; border: 2px solid #b2bec3; }
-
-/* --- Shop View Header --- */
-.shop-header {
-  display: flex; justify-content: space-between; align-items: center;
-  margin: 20px 0; border-bottom: 1px solid #eee; padding-bottom: 10px;
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
 }
 
-.back-btn {
-  padding: 8px 16px; background-color: transparent; border: 1px solid #ccc;
-  border-radius: 6px; cursor: pointer; color: #555;
+.card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  background: #f9f9f9;
 }
-.back-btn:hover { background-color: #f1f1f1; }
 
-.action-btn {
-  padding: 8px 16px; background-color: #6c5ce7; color: white;
-  border: none; border-radius: 6px; cursor: pointer;
-  display: flex; align-items: center; gap: 5px; transition: background 0.2s;
+.card-info {
+  padding: 15px;
 }
-.action-btn:hover { background-color: #5b4cc4; }
-
-/* --- Price Section inside Cards --- */
-.price-section {
-  margin-top: 10px; font-size: 0.9em; border-top: 1px dashed #eee; padding-top: 10px;
+.card-info h3 {
+  margin: 0 0 10px 0;
+  font-size: 1.1rem;
+  color: #333;
 }
-.price-row { display: flex; justify-content: space-between; padding: 2px 0; }
-.single-price { font-weight: bold; font-size: 1.2em; color: #2c3e50; }
-.empty-state { text-align: center; padding: 40px; color: #999; font-style: italic; }
 
-/* --- MODAL STYLES --- */
+.card-badges {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+.badge-season,
+.badge-class {
+  font-size: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+.badge-season {
+  background: #fff3cd;
+  color: #856404;
+}
+.badge-class {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+/* --- MODAL UPDATES --- */
 .modal-overlay {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.6); display: flex; justify-content: center; align-items: center;
-  z-index: 1000; animation: fadeIn 0.2s ease-out;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
 }
 
 .modal-content {
-  background: white; width: 90%; max-width: 800px; border-radius: 12px;
-  position: relative; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-  animation: slideUp 0.3s ease-out; max-height: 90vh; overflow-y: auto;
+  background: white;
+  width: 90%;
+  max-width: 800px;
+  height: auto;
+  max-height: 80vh;
+  border-radius: 16px;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  animation: slideUp 0.3s ease-out;
 }
 
 .close-btn {
-  position: absolute; top: 15px; right: 20px; background: none; border: none;
-  font-size: 2rem; cursor: pointer; color: #555; z-index: 10;
+  position: absolute;
+  top: 12px;
+  /* CHANGED: Increased right margin to avoid scrollbar collision */
+  right: 25px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #eee;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: #555;
+  cursor: pointer;
+  z-index: 20; /* Higher Z-index to stay on top */
+  transition: all 0.2s;
+  line-height: 1;
+}
+.close-btn:hover {
+  background: #f1f1f1;
+  color: #000;
+  transform: rotate(90deg);
 }
 
-.modal-body { display: flex; flex-wrap: wrap; }
+.modal-body {
+  display: flex;
+  width: 100%;
+}
+
+/* Left Side: Image */
 .modal-image {
-  flex: 1; min-width: 300px; background: #f8f9fa; padding: 20px;
-  display: flex; justify-content: center; align-items: center;
-}
-.modal-image img { max-width: 100%; max-height: 350px; object-fit: contain; border-radius: 8px; }
-
-.modal-info { flex: 1.2; padding: 30px; min-width: 300px; }
-
-.school-badge {
-  background: #e3f2fd; color: #1565c0; padding: 4px 8px;
-  border-radius: 4px; font-size: 0.85rem; font-weight: bold; text-transform: uppercase;
-  display: inline-block; /* Changed to block for alignment */
-}
-.modal-desc { color: #666; margin: 15px 0; line-height: 1.5; }
-
-.tag-season { background: #ffeaa7; padding: 3px 8px; border-radius: 4px; margin-right: 5px; font-size: 0.85rem; }
-.tag-grey { background: #eee; padding: 3px 8px; border-radius: 4px; margin-right: 5px; font-size: 0.85rem; }
-
-.modal-pricing { margin-top: 20px; background: #fafafa; padding: 15px; border-radius: 8px; border: 1px solid #eee; }
-.price-row-large { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #ddd; }
-.price-row-large:last-child { border-bottom: none; }
-.price-bold { font-weight: bold; color: #2c3e50; font-size: 1.1rem; }
-
-/* --- Collage Specifics --- */
-.collage-modal { max-width: 1000px; padding: 30px; }
-.collage-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; max-height: 70vh; overflow-y: auto; }
-
-.collage-item {
-  position: relative; width: 200px; height: 200px; border-radius: 8px;
-  overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.1); transition: transform 0.2s;
-}
-.collage-item:hover { transform: scale(1.05); z-index: 5; }
-.collage-item img { width: 100%; height: 100%; object-fit: cover; }
-.collage-label {
-  position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0, 0, 0, 0.7);
-  color: white; text-align: center; padding: 5px 0; font-size: 0.9rem;
+  flex: 0.8;
+  background: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border-right: 1px solid #eee;
 }
 
-/* Animations */
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.modal-image img {
+  max-width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.1));
+}
 
-/* --- NEW: Modal Actions (Edit/Delete) --- */
+/* Right Side: Info */
+.modal-info {
+  flex: 1.2;
+  padding: 25px 30px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header Section */
 .modal-header-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
+  /* CHANGED: Added padding to prevent buttons from overlapping close icon */
+  padding-right: 50px;
 }
 
+.school-badge {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #888;
+  font-weight: 600;
+}
+
+/* ACTION BUTTONS IN MODAL */
 .modal-actions {
   display: flex;
-  gap: 10px;
+  gap: 8px; /* Space between Edit and Delete */
 }
 
 .edit-modal-btn {
-  background: #f1f2f6; 
-  color: #2f3542; 
-  border: 1px solid #ced6e0; 
-  padding: 6px 12px; 
-  border-radius: 4px; 
+  background: none;
+  border: 1px solid #ddd;
+  padding: 3px 12px;
+  border-radius: 15px;
+  font-size: 0.75rem;
   cursor: pointer;
-  font-size: 0.85rem;
-  font-weight: 600;
+  color: #666;
   transition: all 0.2s;
 }
-.edit-modal-btn:hover { background: #dfe4ea; }
+.edit-modal-btn:hover {
+  background: #2c3e50;
+  color: white;
+  border-color: #2c3e50;
+}
 
+/* NEW: Delete Button Style */
 .delete-modal-btn {
-  background: #ffeaa7; 
-  color: #d63031; 
-  border: 1px solid #fab1a0; 
-  padding: 6px 12px; 
-  border-radius: 4px; 
+  background: none;
+  border: 1px solid #fab1a0; /* Light red */
+  padding: 3px 12px;
+  border-radius: 15px;
+  font-size: 0.75rem;
   cursor: pointer;
-  font-size: 0.85rem;
-  font-weight: 600;
+  color: #e17055; /* Red text */
   transition: all 0.2s;
 }
-.delete-modal-btn:hover { background: #ff7675; color: white; border-color: #ff7675; }
+.delete-modal-btn:hover {
+  background: #d63031; /* Strong red */
+  color: white;
+  border-color: #d63031;
+}
+
+.modal-info h2 {
+  margin: 0 0 2px 0;
+  font-size: 1.6rem;
+  color: #1a202c;
+  font-weight: 700;
+}
+
+.subtitle {
+  color: #64748b;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.modal-desc {
+  color: #4b5563;
+  line-height: 1.5;
+  font-size: 0.85rem;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+/* --- PRICING SELECTOR --- */
+.pricing-selector-section h4 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: #94a3b8;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+}
+
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+/* Tag Chips */
+.tag-chip {
+  padding: 6px 14px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #64748b;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+.tag-chip:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+.tag-chip.selected {
+  background: #eff6ff;
+  color: #2563eb;
+  border-color: #2563eb;
+}
+
+/* Pricing Table */
+.pricing-display-area {
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 15px;
+  border: 1px solid #f1f5f9;
+}
+
+/* --- Active Variant Tags Styling --- */
+.active-variant-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #e2e8f0;
+}
+
+.variant-tag-display {
+  background-color: #f1f5f9;
+  color: #475569;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 1px solid #e2e8f0;
+}
+
+.pricing-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: #94a3b8;
+  font-weight: 700;
+  margin-bottom: 8px;
+  padding: 0 10px;
+}
+
+.price-row-large {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: white;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  align-items: center;
+}
+
+.price-row-large span:first-child {
+  font-size: 0.9rem;
+  color: #334155;
+}
+
+.price-bold {
+  font-weight: 700;
+  color: #2c3e50;
+  font-size: 1rem;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .modal-body {
+    flex-direction: column;
+  }
+  .modal-image {
+    flex: none;
+    height: 180px;
+    padding: 15px;
+    border-right: none;
+    border-bottom: 1px solid #eee;
+  }
+  .modal-content {
+    width: 95%;
+    height: auto;
+    max-height: 90vh;
+    border-radius: 12px;
+  }
+  .modal-info {
+    padding: 20px;
+  }
+}
+
+/* --- ACTION TOOLBAR --- */
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.action-toolbar {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  border: none;
+}
+
+.btn-primary {
+  background-color: #2c3e50;
+  color: white;
+}
+.btn-primary:hover {
+  background-color: #34495e;
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background-color: white;
+  color: #2c3e50;
+  border: 1px solid #dcdcdc;
+}
+.btn-secondary:hover {
+  background-color: #f8f9fa;
+  border-color: #bbb;
+}
+
+/* --- CATEGORY FILTER ROW --- */
+.category-filter-row {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  padding-bottom: 5px;
+  margin-bottom: 25px;
+  margin-top: -15px;
+  scrollbar-width: thin;
+}
+
+.category-filter-row::-webkit-scrollbar {
+  height: 4px;
+}
+.category-filter-row::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
+}
+
+.category-pill {
+  padding: 6px 16px;
+  border-radius: 20px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  font-size: 0.9rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.category-pill:hover {
+  border-color: #94a3b8;
+  background: #f8fafc;
+}
+
+.category-pill.active {
+  background: #2c3e50;
+  color: white;
+  border-color: #2c3e50;
+  font-weight: 500;
+}
+
+/* --- COLLAGE MODAL STYLES --- */
+.collage-content {
+  display: flex;
+  flex-direction: column;
+  max-width: 900px;
+  height: 80vh;
+}
+
+.collage-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 25px;
+  border-bottom: 1px solid #eee;
+}
+.collage-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.close-btn-simple {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: #888;
+  transition: transform 0.2s;
+}
+
+.close-btn-simple:hover {
+  transform: rotate(90deg);
+  color: #555;
+}
+
+.collage-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  background: #f9f9f9;
+}
+
+.collage-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+}
+
+.collage-item {
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.collage-item img {
+  width: 100%;
+  height: 150px;
+  object-fit: contain;
+  margin-bottom: 8px;
+}
+
+.collage-item p {
+  font-size: 0.85rem;
+  color: #555;
+  margin: 0;
+  font-weight: 500;
+}

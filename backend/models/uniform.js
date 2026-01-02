@@ -6,28 +6,28 @@ const uniformSchema = new mongoose.Schema({
     ref: 'School', // This links the uniform to a specific School
     required: true
   },
+  category: {
+    type: String,
+    required: true // e.g., "Shirt", "Pant", "Skirt"
+  },
   season: {
     type: String,
     enum: ['Summer', 'Winter', 'All'],
     required: true,
     default: 'All'
   },
-  category: {
+  class: {
+    start: { type: Number, required: true, default: -3 }, // e.g. 1
+    end: { type: Number, required: true, default: 12 }    // e.g. 5
+  },
+  type: {
     type: String,
-    required: true // e.g., "Shirt", "Pant", "Skirt"
+    enum: ['Sport Wear', 'House Dress', 'Normal Dress', 'Miscellaneous'],
+    default: 'Normal Dress',
+    required: true
   },
   imageUrl: { type: String }, // Image for this specific item
   extraInfo: { type: String }, // e.g., "Wash cold only"
-  tags: {
-    type: [String],
-    index: true
-  },
-  pricing: [
-    {
-      size: { type: String, required: true }, // e.g., "32", "Medium"
-      price: { type: Number, required: true }
-    }
-  ]
 });
 
 module.exports = mongoose.model('Uniform', uniformSchema);

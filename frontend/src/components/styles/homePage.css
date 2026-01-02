@@ -1,0 +1,143 @@
+/* Import Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;500;600&display=swap");
+
+/* --- MAIN PAGE CONTAINER --- */
+.home-container {
+  /* Fills the layout area provided by App.js */
+  min-height: calc(100vh - 6rem); 
+  width: 100%;
+
+  /* White Dotted Background */
+  background-color: #ffffff;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  font-family: "Poppins", sans-serif;
+  color: #334155;
+  text-align: center;
+  position: relative; /* For footer positioning */
+}
+
+/* --- CONTENT WRAPPER --- */
+.home-content-wrapper {
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: fadeIn 0.8s ease-out;
+    margin-bottom: 60px; /* Space for footer */
+}
+
+/* --- TYPOGRAPHY --- */
+.home-title {
+  font-family: "Playfair Display", serif;
+  font-size: 4rem; 
+  margin: 0;
+  line-height: 1.1;
+  color: #1e293b;
+  letter-spacing: -1px;
+}
+
+.home-tagline {
+  font-size: 1.1rem;
+  color: #2563eb; /* Theme Blue */
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin: 10px 0 20px 0;
+  font-weight: 600;
+}
+
+.home-divider {
+    width: 60px;
+    height: 4px;
+    background: #e2e8f0;
+    margin: 20px 0;
+    border-radius: 2px;
+}
+
+.home-description {
+    font-size: 1.05rem;
+    color: #64748b;
+    line-height: 1.8;
+    margin-bottom: 50px;
+    max-width: 650px;
+}
+
+/* --- STATS CARDS --- */
+.home-stats-row {
+    display: flex;
+    gap: 30px;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 50px;
+    flex-wrap: wrap;
+}
+
+.stat-card {
+    background: white;
+    padding: 25px 40px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 180px;
+    transition: transform 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+    border-color: #cbd5e1;
+}
+
+.stat-value {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #1e293b;
+    line-height: 1;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: #64748b;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* --- INSTRUCTION HIGHLIGHT (Simplified) --- */
+.home-instruction {
+    font-size: 1.1rem; /* Slightly larger for readability */
+    font-weight: 600;  /* Bold like the tagline */
+    color: #2563eb;    /* Theme Blue */
+    margin-top: 10px;
+    letter-spacing: 0.5px;
+}
+
+/* --- FOOTER --- */
+.home-footer {
+    position: absolute;
+    bottom: 20px;
+    font-size: 0.8rem;
+    color: #94a3b8;
+}
+
+/* --- ANIMATION --- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+    .home-title { font-size: 2.8rem; }
+    .home-stats-row { flex-direction: column; width: 100%; }
+    .stat-card { width: 100%; }
+    .home-footer { position: relative; margin-top: 20px; }
+}

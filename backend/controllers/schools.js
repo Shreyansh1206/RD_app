@@ -1,9 +1,10 @@
 const School = require('../models/school');
 const Uniform = require('../models/uniform');
+const Pricing = require('../models/pricing');
 const { deleteFromCloudinary } = require('../utils/cloudinaryDeleteHelper');
 const { body, validationResult } = require("express-validator");
 
-exports.school_list = async (req, res) => {
+exports.schoolList = async (req, res) => {
   try {
     const schools = await School.find();
     res.json(schools);
@@ -43,11 +44,9 @@ exports.createSchool = [
         return res.status(400).json({ message: "School already exists" });
       }
       
-      const bannerImageUrl = req.file ? req.file.path : "";
       const school = new School({
         name: req.body.name,
         location: req.body.location,
-        bannerImage: bannerImageUrl
       });
 
       const newSchool = await school.save();
@@ -97,41 +96,49 @@ exports.updateSchool = [
 
 exports.deleteSchool = async (req, res) => {
   try {
-    // finding school by id
     const schoolId = req.params.schoolId;
     const school = await School.findById(schoolId);
+    
     if (!school) {
       return res.status(404).json({ message: "School not found" });
     }
 
-    // deleting school banner from cloudinary
-    if (school.bannerImage) {
-      console.log("Deleting School Banner...");
-      await deleteFromCloudinary(school.bannerImage);
-    }
-
-    // deleting associated uniforms and images from cloudinary
-    const uniforms = await Uniform.find({ school: schoolId });
-
+    const uniforms = await Uniform.find({ schoolId: schoolId });
+    
     if (uniforms.length > 0) {
-      console.log(`Found ${uniforms.length} uniforms. Deleting images...`);
-      const imageDeletePromises = uniforms
-        .filter(uniform => uniform.imageUrl) // Only those with images
-        .map(uniform => deleteFromCloudinary(uniform.imageUrl));
-      
-      await Promise.all(imageDeletePromises);
+        const uniformIds = uniforms.map(u => u._id);
+
+        console.log(`Found ${uniformIds.length} uniforms. Deleting associated pricing structures...`);
+        await Pricing.deleteMany({ uniform: { $in: uniformIds } });
+
+        console.log("Deleting uniform images...");
+        const imageDeletePromises = uniforms
+            .filter(uniform => uniform.imageUrl)
+            .map(uniform => deleteFromCloudinary(uniform.imageUrl));
+        
+        await Promise.all(imageDeletePromises);
+
+        await Uniform.deleteMany({ schoolId: schoolId });
     }
 
-    await Uniform.deleteMany({ school: schoolId });
-
-    // deleting school record from database
     await school.deleteOne();
+    
     res.json({ 
-      message: "School, all associated uniforms, and all images deleted successfully." 
+      message: "School, associated uniforms, pricing structures, and images deleted successfully." 
     });
 
   } catch (err) {
     console.error("Delete School Error:", err);
     res.status(500).json({ message: "Server error while deleting school." });
+  }
+};
+
+// unprotected routes
+exports.schoolCount = async (req, res) => {
+  try {
+    const count = await School.countDocuments();
+    res.json({ count });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };

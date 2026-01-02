@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
+const { protect } = require('./middleware/authMiddleware');
 
 const app = express();
 
@@ -17,9 +18,17 @@ mongoose.connect(process.env.MONGO_URI)
 // Routes
 const schoolsRouter = require('./routes/schools');
 const uniformsRouter = require('./routes/uniforms');
+const pricingRouter = require('./routes/pricing');
+const basePricingRouter = require('./routes/basePricing');
+const authRouter = require('./routes/auth');
+const unprotectedRouter = require('./routes/unprotected');
 
-app.use('/api/schools', schoolsRouter);
-app.use('/api/uniforms', uniformsRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/unprotected', unprotectedRouter);
+app.use('/api/schools', protect, schoolsRouter);
+app.use('/api/uniforms', protect, uniformsRouter);
+app.use('/api/pricing', protect, pricingRouter);
+app.use('/api/basePricing', protect, basePricingRouter);
 
 // Start Server
 const PORT = process.env.PORT || 5000;

@@ -1,50 +1,42 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useAlert } from '../context/alertContext';
 import './styles/addSchool.css';
 
 const AddSchool = () => {
   const navigate = useNavigate();
+  const { showAlert } = useAlert();
   
   // State for text fields
   const [name, setName] = useState('');
   const [location, setLocation] = useState('');
-  // State for the file (initialized as null)
-  const [bannerImage, setBannerImage] = useState(null);
-
+  
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
-  // Handle File Selection
-  const handleFileChange = (e) => {
-    // Save the file object itself, not a string
-    setBannerImage(e.target.files[0]);
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
-    try {
-      // 1. Create FormData object
-      const formData = new FormData();
-      formData.append('name', name);
-      formData.append('location', location);
-      
-      // Only append if a file was actually selected
-      if (bannerImage) {
-        // 'bannerImage' is the key your backend middleware expects
-        formData.append('bannerImage', bannerImage); 
-      }
+    if (!name.trim()) {
+        setError("School Name is required.");
+        setLoading(false);
+        return;
+    }
 
-      // 2. Send POST request
-      // Axios detects FormData and sets 'Content-Type': 'multipart/form-data' automatically
-      const res = await axios.post('/api/schools', formData);
+    try {
+      const schoolData = {
+        name: name,
+        location: location
+      };
+
+      const res = await axios.post('/api/schools', schoolData);
       
       console.log("School Created:", res.data);
-      alert('School Created Successfully!');
-      navigate('/'); 
+      await showAlert('School Created Successfully!', 'Success');
+      navigate(-1); 
 
     } catch (err) {
       console.error("Creation Error:", err);
@@ -61,53 +53,45 @@ const AddSchool = () => {
   };
 
   return (
-    <div className="add-school-container">
-      <div className="add-school-card">
-        <h2 className="form-title">Create New School</h2>
-        
-        {error && <div className="error-banner">⚠️ {error}</div>}
+    <div className="as-page-wrapper">
+      <div className="as-header">
+        <h1>Create New School</h1>
+        <div className="as-actions">
+            <button className="btn-cancel" onClick={() => navigate(-1)}>Cancel</button>
+            <button className="btn-save" onClick={handleSubmit} disabled={loading}>
+                {loading ? 'Creating...' : 'Save School'}
+            </button>
+        </div>
+      </div>
 
-        <form onSubmit={handleSubmit}>
-          {/* Name Field */}
-          <div className="form-group">
-            <label className="form-label">School Name <span className="required-star">*</span></label>
-            <input 
-              type="text" 
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. St. Xavier's High School"
-              required 
-              className="form-input"
-            />
-          </div>
+      {error && <div className="as-error-banner">⚠️ {error}</div>}
 
-          {/* Location Field */}
-          <div className="form-group">
-            <label className="form-label">Location</label>
-            <input 
-              type="text" 
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              placeholder="e.g. New Delhi"
-              className="form-input"
-            />
-          </div>
+      <div className="as-grid-layout">
+        <div className="as-card">
+            <h3>School Details</h3>
+            
+            <div className="as-form-group">
+                <label>School Name <span className="req">*</span></label>
+                <input 
+                    type="text" 
+                    className="as-input"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="e.g. St. Xavier's High School"
+                />
+            </div>
 
-          {/* Banner Image Upload */}
-          <div className="form-group">
-            <label className="form-label">Banner Image</label>
-            <input 
-              type="file" 
-              accept="image/*"
-              onChange={handleFileChange}
-              className="form-input"
-            />
-          </div>
-
-          <button type="submit" disabled={loading} className="submit-btn">
-            {loading ? 'Uploading & Creating...' : 'Create School'}
-          </button>
-        </form>
+            <div className="as-form-group">
+                <label>Location</label>
+                <input 
+                    type="text" 
+                    className="as-input"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    placeholder="e.g. New Delhi"
+                />
+            </div>
+        </div>
       </div>
     </div>
   );

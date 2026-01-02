@@ -1,106 +1,144 @@
-.edit-school-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 80vh;
-  background-color: #f5f7fa;
-  padding: 20px;
+/* --- PAGE LAYOUT --- */
+.es-page-wrapper {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    padding: 30px 40px;
+    font-family: 'Segoe UI', sans-serif;
+    color: #333;
+    
+    /* Consistent Dashboard styling */
+    margin-left: 20px; 
+    border-top-left-radius: 16px;
+    border-bottom-left-radius: 16px;
 }
 
-.edit-school-card {
-  background: white;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 500px;
+.es-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
 }
 
-.form-title {
-  text-align: center;
-  color: #333;
-  margin-bottom: 1.5rem;
-  font-size: 1.8rem;
+.es-header h1 {
+    font-size: 1.8rem;
+    color: #1a202c;
+    margin: 0;
+    font-weight: 700;
 }
 
-.form-group {
-  margin-bottom: 1.2rem;
+.es-actions {
+    display: flex;
+    gap: 15px;
 }
 
-.form-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: #555;
-  font-weight: 500;
+/* --- GRID SYSTEM --- */
+.es-grid-layout {
+    display: grid;
+    /* Single column for School form, restricted width */
+    grid-template-columns: minmax(300px, 600px); 
+    gap: 25px;
+    align-items: start;
 }
 
-.required-star {
-  color: #e74c3c;
+/* --- CARDS --- */
+.es-card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+    border: 1px solid #e2e8f0;
 }
 
-.form-input {
-  width: 100%;
-  padding: 0.8rem;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 1rem;
-  transition: border-color 0.3s;
+.es-card h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    color: #4a5568;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 10px;
 }
 
-.form-input:focus {
-  border-color: #3498db;
-  outline: none;
+/* --- FORM ELEMENTS --- */
+.es-form-group {
+    margin-bottom: 20px;
 }
 
-.submit-btn {
-  width: 100%;
-  padding: 0.8rem;
-  background-color: #3498db;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s;
+.es-form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #64748b;
 }
 
-.submit-btn:hover {
-  background-color: #2980b9;
+.req { color: #e53e3e; }
+
+.es-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+    background: #fff;
 }
 
-.submit-btn:disabled {
-  background-color: #bdc3c7;
-  cursor: not-allowed;
+.es-input:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    outline: none;
 }
 
-.delete-btn {
-  width: 100%;
-  padding: 0.8rem;
-  background-color: #e74c3c;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  margin-top: 10px;
+/* --- BUTTONS --- */
+.btn-save {
+    background: #4f46e5;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
+    transition: all 0.2s;
+}
+.btn-save:hover { background: #4338ca; transform: translateY(-1px); }
+
+.btn-cancel {
+    background: white;
+    border: 1px solid #cbd5e0;
+    color: #64748b;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn-cancel:hover { background: #f1f5f9; border-color: #94a3b8; }
+
+.es-error-banner {
+    background: #fee2e2;
+    color: #c53030;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #feb2b2;
+    font-weight: 500;
 }
 
-.delete-btn:hover {
-  background-color: #c0392b;
+.es-loading {
+    display: flex;
+    justify-content: center;
+    padding-top: 50px;
+    color: #64748b;
+    font-size: 1.2rem;
 }
 
-.error-banner {
-  background-color: #fce4e4;
-  color: #c0392b;
-  padding: 10px;
-  border-radius: 6px;
-  margin-bottom: 15px;
-  text-align: center;
-  border: 1px solid #f5c6cb;
-}
-
-.current-banner-preview {
-  margin-bottom: 10px;
-  text-align: center;
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+    .es-page-wrapper { margin-left: 0; padding: 20px; border-radius: 0; }
+    .es-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+    .es-grid-layout { grid-template-columns: 1fr; }
 }

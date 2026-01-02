@@ -1,0 +1,76 @@
+/* src/components/styles/notFound.css */
+
+.not-found-wrapper {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  
+  /* CHANGED: Align to top instead of center, then push down slightly */
+  justify-content: flex-start; 
+  padding-top: 20vh; 
+  
+  align-items: center;
+  background-color: #ffffff; 
+  font-family: "Segoe UI", "Roboto", Helvetica, Arial, sans-serif;
+  color: #333;
+  text-align: center;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.not-found-content {
+  max-width: 600px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.error-code {
+  font-size: 8rem;
+  font-weight: 500;
+  color: #2c3e50;
+  margin: 0;
+  line-height: 1;
+  letter-spacing: -2px;
+}
+
+.error-title {
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin: 10px 0 20px 0;
+  color: #1a202c;
+}
+
+.error-message {
+  color: #64748b;
+  font-size: 1rem;
+  margin-bottom: 30px;
+  line-height: 1.6;
+  max-width: 450px;
+}
+
+.home-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background-color: #f1f5f9; 
+  color: #3b82f6; 
+  text-decoration: none;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  font-size: 0.95rem;
+}
+
+.home-btn:hover {
+  background-color: #e2e8f0;
+  color: #2563eb;
+}
+
+.home-btn svg {
+  width: 16px;
+  height: 16px;
+}
