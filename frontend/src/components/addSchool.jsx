@@ -34,7 +34,6 @@ const AddSchool = () => {
 
       const res = await axios.post('/api/schools', schoolData);
       
-      console.log("School Created:", res.data);
       await showAlert('School Created Successfully!', 'Success');
       navigate(-1); 
 

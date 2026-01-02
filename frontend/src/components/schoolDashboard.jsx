@@ -254,7 +254,19 @@ const SchoolDashboard = () => {
     }
   };
   
-  if (loading) return <div className="loading-container">Loading School...</div>;
+  if (loading) return (
+    <div style={{ 
+      display: 'flex', 
+      justifyContent: 'center', 
+      alignItems: 'center', 
+      height: '80vh', 
+      fontSize: '1.5rem', 
+      color: '#666',
+      fontWeight: '600'
+    }}>
+      Loading School Details...
+    </div>
+  );
 
   return (
     <div className="container">

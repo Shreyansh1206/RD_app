@@ -18,6 +18,11 @@ const protect = async (req, res, next) => {
             // Get user from the token (exclude password)
             req.user = await User.findById(decoded.id).select('-password');
 
+            // CRITICAL FIX: If user was deleted from DB but token is still valid
+            if (!req.user) {
+                return res.status(401).json({ message: 'Not authorized, user not found' });
+            }
+
             next(); // Move to the next middleware/controller
         } catch (error) {
             console.error(error);

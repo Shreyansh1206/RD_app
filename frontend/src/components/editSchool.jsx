@@ -59,7 +59,6 @@ const EditSchool = () => {
       // PATCH Request to update
       const res = await axios.patch(`/api/schools/${schoolId}`, schoolData);
       
-      console.log("School Updated:", res.data);
       await showAlert('School Updated Successfully!', 'Success');
       navigate(-1); 
 
