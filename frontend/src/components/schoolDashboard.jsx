@@ -424,7 +424,7 @@ const SchoolDashboard = () => {
                         {pricingLoading ? (
                              <div className="loading-text">Loading pricing...</div>
                         ) : matchingPricing === "none" || !matchingPricing ? (
-                             <div className="error-box">⚠️ No pricing structure found.</div>
+                             <div className="error-box">No pricing structure found.</div>
                         ) : (
                             <div className="pricing-table">
                                 {/* ACTIVE TAGS DISPLAY */}
