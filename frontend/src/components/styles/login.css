@@ -21,8 +21,9 @@
 
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap; /* ADDED: Allows wrapping on high zoom */
   font-family: "Poppins", sans-serif;
-  overflow: hidden;
+  overflow: auto; /* CHANGED: Allow scroll bars if content overflows */
 }
 
 /* --- LEFT PANE (Hero & Stats) --- */
