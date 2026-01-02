@@ -17,6 +17,7 @@ const SchoolDashboard = () => {
 
   // --- Modal Specific State ---
   const [pricingVariants, setPricingVariants] = useState([]); 
+  const [pricingLoading, setPricingLoading] = useState(false); // NEW STATE
   const [selectedTags, setSelectedTags] = useState([]);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -60,11 +61,14 @@ const SchoolDashboard = () => {
 
     const fetchPricing = async () => {
       try {
+        setPricingLoading(true); // START LOADING
         const res = await axios.get(`/api/pricing/uniform/${activeUniformId}`);
         setPricingVariants(res.data);
       } catch (err) {
         console.error("Pricing Fetch Error:", err);
         setPricingVariants([]); 
+      } finally {
+        setPricingLoading(false); // END LOADING
       }
     };
     fetchPricing();
@@ -417,9 +421,11 @@ const SchoolDashboard = () => {
                     )}
                     
                     <div className="pricing-display-area">
-                        {matchingPricing === "none" ? (
-                            <div className="error-box">⚠️ No pricing structure found.</div>
-                        ) : matchingPricing ? (
+                        {pricingLoading ? (
+                             <div className="loading-text">Loading pricing...</div>
+                        ) : matchingPricing === "none" || !matchingPricing ? (
+                             <div className="error-box">⚠️ No pricing structure found.</div>
+                        ) : (
                             <div className="pricing-table">
                                 {/* ACTIVE TAGS DISPLAY */}
                                 {matchingPricing.tags && matchingPricing.tags.length > 0 && (
@@ -441,8 +447,6 @@ const SchoolDashboard = () => {
                                     </div>
                                 ))}
                             </div>
-                        ) : (
-                            <div className="loading-text">Loading pricing...</div>
                         )}
                     </div>
                 </div>
