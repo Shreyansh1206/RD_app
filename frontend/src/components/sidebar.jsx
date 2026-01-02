@@ -6,13 +6,20 @@ import './styles/sidebar.css';
 const Sidebar = () => {
   const [schools, setSchools] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(true); // Added loading state
   const location = useLocation();
 
   // Fetch list of schools once on mount
   useEffect(() => {
     axios.get('/api/schools')
-      .then(res => setSchools(res.data))
-      .catch(err => console.error("Sidebar fetch error:", err));
+      .then(res => {
+        setSchools(res.data);
+        setLoading(false); // Stop loading on success
+      })
+      .catch(err => {
+        console.error("Sidebar fetch error:", err);
+        setLoading(false); // Stop loading on error
+      });
   }, []);
 
   // Filter schools based on search
@@ -36,7 +43,9 @@ const Sidebar = () => {
       </div>
 
       <div className="sidebar-list">
-        {filteredSchools.length > 0 ? (
+        {loading ? (
+             <div className="no-results">Loading schools...</div>
+        ) : filteredSchools.length > 0 ? (
           filteredSchools.map(school => (
             <Link 
               to={`/school/${school._id}`} 
