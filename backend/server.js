@@ -20,7 +20,7 @@ app.set('trust proxy', 1); // CRITICAL for Vercel: Trust the proxy to get correc
 
 // Middleware
 app.use(cors({
-    origin: ["http://localhost:5173", "https://rastogi-dresses.vercel.app"], // Allow these specific domains
+    origin: ["http://localhost:5173", "https://rastogidresses.vercel.app"], // Allow these specific domains
     credentials: true
 })); // Allows your React frontend to talk to this backend
 app.use(express.json()); // Allows server to parse JSON in request body
