@@ -16,19 +16,23 @@
   /* VERTICAL GAP FIX */
   margin-top: 0px;
 
-  /* HEIGHT: Fill exactly the rest of the screen */
+  /* REMOVED: height: 100vh (Let it grow) */
   min-height: 100vh;
 
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap; /* ADDED: Allows wrapping on high zoom */
+  flex-wrap: wrap;
   font-family: "Poppins", sans-serif;
-  overflow: auto; /* CHANGED: Allow scroll bars if content overflows */
+
+  /* REMOVED: overflow-y: auto (Body handles scroll now) */
+  /* Keep overflow-x hidden to prevent horizontal scrollbars from full-width sections */
+  overflow-x: hidden;
 }
 
 /* --- LEFT PANE (Hero & Stats) --- */
 .hero-pane {
   flex: 1.1;
+  min-width: 320px; /* Reduced from 500px for better mobile/zoom fit */
   background-color: #f8fafc;
   /* Dot Pattern Background */
   background-image: radial-gradient(#cbd5e1 1.5px, transparent 1.5px);
@@ -132,6 +136,7 @@
 /* --- RIGHT PANE (Interaction) --- */
 .interaction-pane {
   flex: 0.9;
+  min-width: 320px; /* Reduced to ensure it fits on small screens */
   /* Deep Gradient */
   background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
 

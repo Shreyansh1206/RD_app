@@ -43,6 +43,25 @@ const Login = () => {
     fetchStats();
   }, []);
 
+  // --- ZOOM FIX: Unlock Global Scroll ---
+  // The app normally locks scrolling (overflow: hidden) for the Dashboard.
+  // But for Login (especially with zoom), we need natural window scrolling.
+  useEffect(() => {
+    // Save original styles
+    const originalHtmlOverflow = document.documentElement.style.overflow;
+    const originalBodyOverflow = document.body.style.overflow;
+
+    // Unlock
+    document.documentElement.style.overflow = 'auto';
+    document.body.style.overflow = 'auto';
+
+    // Cleanup: Restore original locks (important for Dashboard)
+    return () => {
+        document.documentElement.style.overflow = originalHtmlOverflow;
+        document.body.style.overflow = originalBodyOverflow;
+    };
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
