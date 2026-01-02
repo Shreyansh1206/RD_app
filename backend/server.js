@@ -15,18 +15,25 @@ if (missingEnv.length > 0) {
 }
 
 const app = express();
+app.set('trust proxy', 1); // CRITICAL for Vercel: Trust the proxy to get correct IP
 
 // Middleware
-app.use(cors()); // Allows your React frontend to talk to this backend
+app.use(cors({
+    origin: ["http://localhost:5173", "https://rastogi-dresses.vercel.app"], // Allow these specific domains
+    credentials: true
+})); // Allows your React frontend to talk to this backend
 app.use(express.json()); // Allows server to parse JSON in request body
 
 // Apply Rate Limiting to all API routes
 app.use('/api', apiLimiter);
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('MongoDB Connected Successfully'))
-  .catch(err => console.log('MongoDB Connection Error:', err));
+// Connect to MongoDB (Optimized for Serverless)
+// Check if we are already connected before trying to connect again
+if (mongoose.connection.readyState === 0) {
+  mongoose.connect(process.env.MONGO_URI)
+    .then(() => console.log('MongoDB Connected Successfully'))
+    .catch(err => console.log('MongoDB Connection Error:', err));
+}
 
 // Routes
 const schoolsRouter = require('./routes/schools');
@@ -45,6 +52,12 @@ app.use('/api/basePricing', protect, basePricingRouter);
 
 // Start Server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// Only run locally if NOT in Vercel production
+if (process.env.NODE_ENV && process.env.NODE_ENV.trim() !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}
+
+// CRITICAL for Vercel: Export the app so Vercel can run it as a Serverless Function
+module.exports = app;
