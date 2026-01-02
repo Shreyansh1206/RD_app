@@ -44,6 +44,10 @@ const basePricingRouter = require('./routes/basePricing');
 const authRouter = require('./routes/auth');
 const unprotectedRouter = require('./routes/unprotected');
 
+app.get('/', (req, res) => {
+    res.send("API is Running");
+});
+
 app.use(async (req, res, next) => {
     try {
         await connectDB(); // Ensure DB is connected before ANY route is hit
