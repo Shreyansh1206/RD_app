@@ -268,7 +268,8 @@ const AddUniform = () => {
     setError('');
 
     if(!schoolSearch.trim()) { setError("Please enter or select a School Name."); setLoading(false); return; }
-    if(addedPricingStructures.length === 0) { setError("Please add at least one pricing structure."); setLoading(false); return; }
+    // REMOVED: Pricing Validation
+    // if(addedPricingStructures.length === 0) { setError("Please add at least one pricing structure."); setLoading(false); return; }
     // 5. Block submit if compressing
     if(isCompressing) { setError("Please wait for image compression to complete."); setLoading(false); return; }
 
