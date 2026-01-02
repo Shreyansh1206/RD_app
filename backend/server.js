@@ -4,6 +4,7 @@ const cors = require('cors');
 require('dotenv').config();
 const { protect } = require('./middleware/authMiddleware');
 const { apiLimiter } = require('./middleware/limiter');
+const connectDB = require('./config/db');
 
 // --- FAIL-FAST VALIDATION ---
 const requiredEnv = ['MONGO_URI', 'JWT_SECRET', 'CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_API_KEY', 'CLOUDINARY_API_SECRET'];
@@ -42,6 +43,16 @@ const pricingRouter = require('./routes/pricing');
 const basePricingRouter = require('./routes/basePricing');
 const authRouter = require('./routes/auth');
 const unprotectedRouter = require('./routes/unprotected');
+
+app.use(async (req, res, next) => {
+    try {
+        await connectDB(); // Ensure DB is connected before ANY route is hit
+        next();
+    } catch (error) {
+        console.error("Database connection failed:", error);
+        res.status(500).json({ error: "Database connection failed" });
+    }
+});
 
 app.use('/api/auth', authRouter);
 app.use('/api/unprotected', unprotectedRouter);
