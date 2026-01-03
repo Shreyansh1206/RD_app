@@ -6,7 +6,7 @@ import { useAlert } from '../context/alertContext';
 import './styles/addUniform.css';
 
 // --- CONSTANTS ---
-const CATEGORIES = ['Shirt', 'Pant', 'Half Pant', 'Skirt', 'Frock', 'Jacket', 'Kurta', 'Salwar', 'Dupatta', 'Lower', 'Blazer', 'Tie', 'Cap', 'Sweater', 'Socks', 'Tracksuit', 'T-Shirt', 'Belt', 'Tunic', 'Miscellaneous'];
+const CATEGORIES = ['Shirt', 'Pant', 'Half Pant', 'Skirt', 'Frock', 'Jacket', 'Kurta', 'Salwar', 'Dupatta', 'Lower', 'Blazer', 'Tie', 'Cap', 'Sweater', 'Socks', 'Tracksuit', 'T-Shirt', 'Belt', 'Tunic', 'Monogram', 'Miscellaneous'];
 const CLASS_OPTIONS = [
   { label: 'Pre-Nursery', value: -3 },
   { label: 'Nursery', value: -2 },
@@ -14,7 +14,7 @@ const CLASS_OPTIONS = [
   { label: 'UKG', value: 0 },
   ...Array.from({ length: 12 }, (_, i) => ({ label: `Class ${i + 1}`, value: i + 1 }))
 ];
-const TYPES = ['Normal Dress', 'Sport Wear', 'House Dress', 'Winter Wear', 'Accessory'];
+const TYPES = ['Sport Wear', 'House Dress', 'Normal Dress', 'Miscellaneous'];
 
 // --- SUB-COMPONENT: PRICING EDITOR ---
 const PricingEditor = ({ initialData, onSave, onCancel, templates, category, isNew }) => {
@@ -166,8 +166,11 @@ const AddUniform = () => {
   const [schoolSearch, setSchoolSearch] = useState(location.state?.schoolName || ''); 
   const [showSchoolDropdown, setShowSchoolDropdown] = useState(false);
   
-  const [category, setCategory] = useState(CATEGORIES[0]);
+  const [category, setCategory] = useState(''); // CHANGED: Default empty
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false); // NEW STATE
+
+  // Unified Dropdown State for others
+  const [activeDropdown, setActiveDropdown] = useState(null); // 'type' | 'season' | 'classMin' | 'classMax'
 
   const [season, setSeason] = useState('All');
   const [type, setType] = useState('Normal Dress');
@@ -178,18 +181,23 @@ const AddUniform = () => {
   // Image States
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
-  const [isCompressing, setIsCompressing] = useState(false); // 2. Loading State
+  const [isCompressing, setIsCompressing] = useState(false); 
 
   const [addedPricingStructures, setAddedPricingStructures] = useState([]);
   const [editingId, setEditingId] = useState(null);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  
+  // Refs
   const schoolWrapperRef = useRef(null);
   const categoryWrapperRef = useRef(null);
+  const typeWrapperRef = useRef(null);
+  const seasonWrapperRef = useRef(null);
+  const classMinWrapperRef = useRef(null);
+  const classMaxWrapperRef = useRef(null);
+
   const { showAlert } = useAlert();
-
-
 
   // --- EFFECTS ---
   useEffect(() => {
@@ -198,19 +206,29 @@ const AddUniform = () => {
   }, []);
 
   useEffect(() => {
-    const fetchBasePricing = async () => { try { const res = await axios.get(`/api/basePricing/category/${category}`); setBasePricingTemplates(res.data); } catch (err) { setBasePricingTemplates([]); } };
-    fetchBasePricing();
+    // Only fetch if category is valid/selected
+    if(category && CATEGORIES.includes(category)) {
+        const fetchBasePricing = async () => { try { const res = await axios.get(`/api/basePricing/category/${category}`); setBasePricingTemplates(res.data); } catch (err) { setBasePricingTemplates([]); } };
+        fetchBasePricing();
+    } else {
+        setBasePricingTemplates([]);
+    }
   }, [category]);
 
   useEffect(() => {
     function handleClickOutside(event) {
       if (schoolWrapperRef.current && !schoolWrapperRef.current.contains(event.target)) setShowSchoolDropdown(false);
-      // NEW: Handle Category Outside Click
       if (categoryWrapperRef.current && !categoryWrapperRef.current.contains(event.target)) setShowCategoryDropdown(false);
+      
+      // Close unified dropdowns
+      if (activeDropdown === 'type' && typeWrapperRef.current && !typeWrapperRef.current.contains(event.target)) setActiveDropdown(null);
+      if (activeDropdown === 'season' && seasonWrapperRef.current && !seasonWrapperRef.current.contains(event.target)) setActiveDropdown(null);
+      if (activeDropdown === 'classMin' && classMinWrapperRef.current && !classMinWrapperRef.current.contains(event.target)) setActiveDropdown(null);
+      if (activeDropdown === 'classMax' && classMaxWrapperRef.current && !classMaxWrapperRef.current.contains(event.target)) setActiveDropdown(null);
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [schoolWrapperRef, categoryWrapperRef]);
+  }, [schoolWrapperRef, categoryWrapperRef, typeWrapperRef, seasonWrapperRef, classMinWrapperRef, classMaxWrapperRef, activeDropdown]);
 
   // --- HANDLERS ---
   const selectSchool = (s) => { 
@@ -223,37 +241,27 @@ const AddUniform = () => {
       setShowSchoolDropdown(true);
   };
 
-  // 3. Updated File Handler with Compression Logic (0.5MB Limit)
+  const toggleDropdown = (name) => {
+      if (activeDropdown === name) setActiveDropdown(null);
+      else setActiveDropdown(name);
+  };
+
+  // Helper to get Class Label
+  const getClassLabel = (val) => CLASS_OPTIONS.find(o => o.value == val)?.label || val;
+
+  // 3. Updated File Handler... (omitted logic unchanged)
   const handleFileChange = async (e) => { 
       const file = e.target.files[0]; 
-      
       if (file) {
-        // Safety check for massive files
-        if (file.size > 20 * 1024 * 1024) {
-            showAlert("File is too large! Please upload an image under 20MB.");
-            return;
-        }
-
+        if (file.size > 20 * 1024 * 1024) { showAlert("File is too large! Please upload an image under 20MB."); return; }
         setIsCompressing(true);
-
-        const options = {
-            maxSizeMB: 0.5,          // 4. Set Constraint: 0.5 MB
-            maxWidthOrHeight: 1200,  // Good quality for web catalog
-            useWebWorker: true,
-        };
-
+        const options = { maxSizeMB: 0.5, maxWidthOrHeight: 1200, useWebWorker: true };
         try {
             const compressedFile = await imageCompression(file, options);
-            setImageFile(compressedFile); 
-            setImagePreview(URL.createObjectURL(compressedFile)); 
+            setImageFile(compressedFile); setImagePreview(URL.createObjectURL(compressedFile)); 
         } catch (error) {
-            console.error("Compression failed:", error);
-            // Fallback to original
-            setImageFile(file);
-            setImagePreview(URL.createObjectURL(file));
-        } finally {
-            setIsCompressing(false);
-        }
+            console.error("Compression failed:", error); setImageFile(file); setImagePreview(URL.createObjectURL(file));
+        } finally { setIsCompressing(false); }
       } 
   };
 
@@ -261,20 +269,15 @@ const AddUniform = () => {
   const handleUpdateStructure = (data) => { setAddedPricingStructures(prev => prev.map(item => item.id === editingId ? { ...item, ...data } : item)); setEditingId(null); };
   const handleDeleteStructure = (id, e) => { e.stopPropagation(); setAddedPricingStructures(prev => prev.filter(p => p.id !== id)); if (editingId === id) setEditingId(null); };
 
-  // --- SUBMIT LOGIC ---
+  // --- SUBMIT LOGIC --- (unchanged)
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); 
-    setError('');
-
+    setLoading(true); setError('');
     if(!schoolSearch.trim()) { setError("Please enter or select a School Name."); setLoading(false); return; }
-    // REMOVED: Pricing Validation
-    // if(addedPricingStructures.length === 0) { setError("Please add at least one pricing structure."); setLoading(false); return; }
-    // 5. Block submit if compressing
+    if(!category || !CATEGORIES.includes(category)) { setError("Please select a valid Category from the list."); setLoading(false); return; }
     if(isCompressing) { setError("Please wait for image compression to complete."); setLoading(false); return; }
 
     try {
-      // 1. Create the Uniform first
       const formData = new FormData();
       formData.append('schoolName', schoolSearch);
       formData.append('category', category);
@@ -285,34 +288,20 @@ const AddUniform = () => {
       formData.append('extraInfo', extraInfo);
       if (imageFile) formData.append('uniformImage', imageFile);
 
-      const uniformRes = await axios.post('/api/uniforms', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
-      
+      const uniformRes = await axios.post('/api/uniforms', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
       const newUniformId = uniformRes.data.uniform._id; 
 
-      // 2. Create Pricing Structures
       const pricingRequests = addedPricingStructures.map(struct => {
           return axios.post('/api/pricing', {
-              uniform: newUniformId, 
-              tags: struct.tags,
-              priceData: struct.priceData,
-              // Send the base ID (if linked) or null (if custom/edited)
-              basePricingId: struct.basePricingId 
+              uniform: newUniformId, tags: struct.tags, priceData: struct.priceData, basePricingId: struct.basePricingId 
           });
       });
-
       await Promise.all(pricingRequests);
-
       await showAlert('Uniform and Pricing Created Successfully!', 'Success');
       navigate(-1); 
-
     } catch (err) {
-      console.error('Error:', err);
-      setError(err.response?.data?.message || 'Something went wrong during creation.');
-    } finally {
-      setLoading(false);
-    }
+      console.error('Error:', err); setError(err.response?.data?.message || 'Something went wrong during creation.');
+    } finally { setLoading(false); }
   };
 
   const filteredSchools = schools.filter(s => s.name.toLowerCase().includes(schoolSearch.toLowerCase()));
@@ -323,9 +312,7 @@ const AddUniform = () => {
         <h1>Add New Uniform</h1>
         <div className="au-actions">
             <button className="btn-cancel" onClick={() => navigate(-1)}>Cancel</button>
-            <button className="btn-save" onClick={handleSubmit} disabled={loading || isCompressing}>
-                {loading ? 'Saving...' : 'Save Uniform'}
-            </button>
+            <button className="btn-save" onClick={handleSubmit} disabled={loading || isCompressing}> {loading ? 'Saving...' : 'Save Uniform'} </button>
         </div>
       </div>
 
@@ -338,21 +325,10 @@ const AddUniform = () => {
                 
                 <div className="au-form-group" ref={schoolWrapperRef}>
                     <label>School Name <span className="req">*</span></label>
-                    <input 
-                        type="text" 
-                        className="au-input" 
-                        placeholder="Search or enter new school name..." 
-                        value={schoolSearch}
-                        onChange={handleSchoolChange}
-                        onFocus={() => setShowSchoolDropdown(true)}
-                    />
+                    <input type="text" className="au-input" placeholder="Search or enter new school name..." value={schoolSearch} onChange={handleSchoolChange} onFocus={() => setShowSchoolDropdown(true)} />
                     {showSchoolDropdown && filteredSchools.length > 0 && (
                         <div className="au-dropdown-list">
-                            {filteredSchools.map(s => (
-                                <div key={s._id} className="au-dropdown-item" onClick={() => selectSchool(s)}>
-                                    {s.name} <span className="loc-hint">({s.location})</span>
-                                </div>
-                            ))}
+                            {filteredSchools.map(s => ( <div key={s._id} className="au-dropdown-item" onClick={() => selectSchool(s)}> {s.name} <span className="loc-hint">({s.location})</span> </div> ))}
                         </div>
                     )}
                 </div>
@@ -360,38 +336,105 @@ const AddUniform = () => {
                 <div className="au-row three-col">
                     <div className="au-form-group" ref={categoryWrapperRef}>
                         <label>Category <span className="req">*</span></label>
-                        <input 
-                            type="text" 
-                            className="au-input" 
-                            placeholder="Select or Type..." 
-                            value={category} 
-                            onChange={e => setCategory(e.target.value)}
-                            onFocus={() => setShowCategoryDropdown(true)}
-                        />
+                        <input type="text" className="au-input" placeholder="Select a Category..." value={category} onChange={e => setCategory(e.target.value)} onFocus={() => setShowCategoryDropdown(true)} />
                         {showCategoryDropdown && (
                              <div className="au-dropdown-list">
-                                 {CATEGORIES.filter(c => c.toLowerCase().includes(category.toLowerCase())).map(c => (
-                                     <div key={c} className="au-dropdown-item" onClick={() => { setCategory(c); setShowCategoryDropdown(false); }}>
-                                         {c}
-                                     </div>
-                                 ))}
-                                 {CATEGORIES.filter(c => c.toLowerCase().includes(category.toLowerCase())).length === 0 && (
-                                     <div className="au-dropdown-item" style={{color: '#999', cursor: 'default'}}>
-                                         No matches. Press Enter to use "{category}"
-                                     </div>
-                                 )}
+                                 {CATEGORIES.filter(c => c.toLowerCase().includes(category.toLowerCase())).map(c => ( <div key={c} className="au-dropdown-item" onClick={() => { setCategory(c); setShowCategoryDropdown(false); }}> {c} </div> ))}
+                                 {CATEGORIES.filter(c => c.toLowerCase().includes(category.toLowerCase())).length === 0 && ( <div className="au-dropdown-item" style={{color: '#999', cursor: 'default'}}> No category found </div> )}
                              </div>
                         )}
                     </div>
-                    <div className="au-form-group"><label>Type</label><select className="au-select" value={type} onChange={e => setType(e.target.value)}>{TYPES.map(t => <option key={t} value={t}>{t}</option>)}</select></div>
-                    <div className="au-form-group"><label>Season</label><select className="au-select" value={season} onChange={e => setSeason(e.target.value)}><option value="All">All Seasons</option><option value="Summer">Summer</option><option value="Winter">Winter</option></select></div>
+                    
+                    {/* CUSTOM DROPDOWN: TYPE */}
+                    <div className="au-form-group" ref={typeWrapperRef}>
+                        <label>Type</label>
+                        <input 
+                            type="text" 
+                            className="au-input" 
+                            readOnly 
+                            value={type} 
+                            onClick={() => toggleDropdown('type')} 
+                            style={{ cursor: 'pointer' }}
+                        />
+                        {activeDropdown === 'type' && (
+                            <div className="au-dropdown-list">
+                                {TYPES.map(t => (
+                                    <div key={t} className="au-dropdown-item" onClick={() => { setType(t); setActiveDropdown(null); }}>
+                                        {t}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* CUSTOM DROPDOWN: SEASON */}
+                    <div className="au-form-group" ref={seasonWrapperRef}>
+                        <label>Season</label>
+                        <input 
+                            type="text" 
+                            className="au-input" 
+                            readOnly 
+                            value={season} 
+                            onClick={() => toggleDropdown('season')} 
+                            style={{ cursor: 'pointer' }}
+                        />
+                        {activeDropdown === 'season' && (
+                            <div className="au-dropdown-list">
+                                <div className="au-dropdown-item" onClick={() => { setSeason('All'); setActiveDropdown(null); }}>All Seasons</div>
+                                <div className="au-dropdown-item" onClick={() => { setSeason('Summer'); setActiveDropdown(null); }}>Summer</div>
+                                <div className="au-dropdown-item" onClick={() => { setSeason('Winter'); setActiveDropdown(null); }}>Winter</div>
+                            </div>
+                        )}
+                    </div>
                 </div>
+
                 <div className="au-row two-col">
-                    <div className="au-form-group"><label>Class Range</label><div className="au-range-wrapper">
-                        <select className="au-select" value={classMin} onChange={e => setClassMin(e.target.value)}>{CLASS_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}</select>
-                        <span className="range-sep">to</span>
-                        <select className="au-select" value={classMax} onChange={e => setClassMax(e.target.value)}>{CLASS_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}</select>
-                    </div></div>
+                    <div className="au-form-group">
+                        <label>Class Range</label>
+                        <div className="au-range-wrapper">
+                            {/* CUSTOM DROPDOWN: CLASS MIN */}
+                            <div style={{ position: 'relative', flex: 1 }} ref={classMinWrapperRef}>
+                                <input 
+                                    className="au-input" 
+                                    readOnly 
+                                    value={getClassLabel(classMin)} 
+                                    onClick={() => toggleDropdown('classMin')}
+                                    style={{ cursor: 'pointer' }}
+                                />
+                                {activeDropdown === 'classMin' && (
+                                    <div className="au-dropdown-list">
+                                        {CLASS_OPTIONS.map(o => (
+                                            <div key={o.value} className="au-dropdown-item" onClick={() => { setClassMin(o.value); setActiveDropdown(null); }}>
+                                                {o.label}
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+
+                            <span className="range-sep">to</span>
+                            
+                            {/* CUSTOM DROPDOWN: CLASS MAX */}
+                            <div style={{ position: 'relative', flex: 1 }} ref={classMaxWrapperRef}>
+                                <input 
+                                    className="au-input" 
+                                    readOnly 
+                                    value={getClassLabel(classMax)} 
+                                    onClick={() => toggleDropdown('classMax')}
+                                    style={{ cursor: 'pointer' }}
+                                />
+                                {activeDropdown === 'classMax' && (
+                                    <div className="au-dropdown-list">
+                                        {CLASS_OPTIONS.map(o => (
+                                            <div key={o.value} className="au-dropdown-item" onClick={() => { setClassMax(o.value); setActiveDropdown(null); }}>
+                                                {o.label}
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
                     <div className="au-form-group"><label>Extra Info</label><input type="text" className="au-input" placeholder="Details..." value={extraInfo} onChange={e => setExtraInfo(e.target.value)} /></div>
                 </div>
             </div>

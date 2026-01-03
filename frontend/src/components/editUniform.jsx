@@ -6,7 +6,7 @@ import { useAlert } from '../context/alertContext';
 import './styles/editUniform.css';
 
 // --- CONSTANTS ---
-const CATEGORIES = ['Shirt', 'Pant', 'Half Pant', 'Skirt', 'Frock', 'Jacket', 'Kurta', 'Salwar', 'Dupatta', 'Lower', 'Blazer', 'Tie', 'Cap', 'Sweater', 'Socks', 'Tracksuit', 'T-Shirt', 'Belt', 'Tunic', 'Miscellaneous'];
+const CATEGORIES = ['Shirt', 'Pant', 'Half Pant', 'Skirt', 'Frock', 'Jacket', 'Kurta', 'Salwar', 'Dupatta', 'Lower', 'Blazer', 'Tie', 'Cap', 'Sweater', 'Socks', 'Tracksuit', 'T-Shirt', 'Belt', 'Tunic', 'Monogram', 'Miscellaneous'];
 const CLASS_OPTIONS = [
   { label: 'Pre-Nursery', value: -3 },
   { label: 'Nursery', value: -2 },
@@ -14,7 +14,7 @@ const CLASS_OPTIONS = [
   { label: 'UKG', value: 0 },
   ...Array.from({ length: 12 }, (_, i) => ({ label: `Class ${i + 1}`, value: i + 1 }))
 ];
-const TYPES = ['Normal Dress', 'Sport Wear', 'House Dress', 'Winter Wear', 'Accessory'];
+const TYPES = ['Sport Wear', 'House Dress', 'Normal Dress', 'Miscellaneous'];
 
 // --- SUB-COMPONENT: PRICING EDITOR ---
 const PricingEditor = ({ initialData, onSave, onCancel, templates, category, isNew }) => {
@@ -189,7 +189,10 @@ const EditUniform = () => {
   const [showSchoolDropdown, setShowSchoolDropdown] = useState(false);
   
   const [category, setCategory] = useState(CATEGORIES[0]);
-  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false); // NEW STATE
+  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false); 
+
+  // Unified Dropdown State
+  const [activeDropdown, setActiveDropdown] = useState(null);
 
   const [season, setSeason] = useState('All');
   const [type, setType] = useState('Normal Dress');
@@ -200,7 +203,7 @@ const EditUniform = () => {
   // Image States
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
-  const [isCompressing, setIsCompressing] = useState(false); // 2. Loading State
+  const [isCompressing, setIsCompressing] = useState(false); 
 
   const [addedPricingStructures, setAddedPricingStructures] = useState([]);
   const [deletedPricingIds, setDeletedPricingIds] = useState([]); 
@@ -209,8 +212,14 @@ const EditUniform = () => {
   const [loading, setLoading] = useState(true); 
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  
+  // Refs
   const schoolWrapperRef = useRef(null);
-  const categoryWrapperRef = useRef(null); // NEW REF
+  const categoryWrapperRef = useRef(null);
+  const typeWrapperRef = useRef(null);
+  const seasonWrapperRef = useRef(null);
+  const classMinWrapperRef = useRef(null);
+  const classMaxWrapperRef = useRef(null);
 
   const { showAlert } = useAlert();
 
@@ -279,17 +288,18 @@ const EditUniform = () => {
 
   useEffect(() => {
     function handleClickOutside(event) {
-      if (schoolWrapperRef.current && !schoolWrapperRef.current.contains(event.target)) {
-        setShowSchoolDropdown(false);
-      }
-      // NEW: Handle Category
-      if (categoryWrapperRef.current && !categoryWrapperRef.current.contains(event.target)) {
-        setShowCategoryDropdown(false);
-      }
+      if (schoolWrapperRef.current && !schoolWrapperRef.current.contains(event.target)) setShowSchoolDropdown(false);
+      if (categoryWrapperRef.current && !categoryWrapperRef.current.contains(event.target)) setShowCategoryDropdown(false);
+      
+      // Close unified dropdowns
+      if (activeDropdown === 'type' && typeWrapperRef.current && !typeWrapperRef.current.contains(event.target)) setActiveDropdown(null);
+      if (activeDropdown === 'season' && seasonWrapperRef.current && !seasonWrapperRef.current.contains(event.target)) setActiveDropdown(null);
+      if (activeDropdown === 'classMin' && classMinWrapperRef.current && !classMinWrapperRef.current.contains(event.target)) setActiveDropdown(null);
+      if (activeDropdown === 'classMax' && classMaxWrapperRef.current && !classMaxWrapperRef.current.contains(event.target)) setActiveDropdown(null);
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [schoolWrapperRef, categoryWrapperRef]);
+  }, [schoolWrapperRef, categoryWrapperRef, typeWrapperRef, seasonWrapperRef, classMinWrapperRef, classMaxWrapperRef, activeDropdown]);
 
   const selectSchool = (s) => { 
       setSchoolSearch(s.name); 
@@ -300,6 +310,14 @@ const EditUniform = () => {
       setSchoolSearch(e.target.value);
       setShowSchoolDropdown(true);
   };
+
+  const toggleDropdown = (name) => {
+      if (activeDropdown === name) setActiveDropdown(null);
+      else setActiveDropdown(name);
+  };
+
+  // Helper to get Class Label
+  const getClassLabel = (val) => CLASS_OPTIONS.find(o => o.value == val)?.label || val;
 
   // 3. Updated File Handler with Compression Logic (0.5MB Limit)
   const handleFileChange = async (e) => { 
@@ -484,19 +502,45 @@ const EditUniform = () => {
                              </div>
                         )}
                     </div>
-                    <div className="eu-form-group">
+                    {/* CUSTOM DROPDOWN: TYPE */}
+                    <div className="eu-form-group" ref={typeWrapperRef}>
                         <label>Type</label>
-                        <select className="eu-select" value={type} onChange={e => setType(e.target.value)}>
-                            {TYPES.map(t => <option key={t} value={t}>{t}</option>)}
-                        </select>
+                        <input 
+                            type="text" 
+                            className="eu-input" 
+                            readOnly 
+                            value={type} 
+                            onClick={() => toggleDropdown('type')} 
+                            style={{ cursor: 'pointer' }}
+                        />
+                        {activeDropdown === 'type' && (
+                            <div className="eu-dropdown-list">
+                                {TYPES.map(t => (
+                                    <div key={t} className="eu-dropdown-item" onClick={() => { setType(t); setActiveDropdown(null); }}>
+                                        {t}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
-                    <div className="eu-form-group">
+                    {/* CUSTOM DROPDOWN: SEASON */}
+                    <div className="eu-form-group" ref={seasonWrapperRef}>
                         <label>Season</label>
-                        <select className="eu-select" value={season} onChange={e => setSeason(e.target.value)}>
-                            <option value="All">All Seasons</option>
-                            <option value="Summer">Summer</option>
-                            <option value="Winter">Winter</option>
-                        </select>
+                        <input 
+                            type="text" 
+                            className="eu-input" 
+                            readOnly 
+                            value={season} 
+                            onClick={() => toggleDropdown('season')} 
+                            style={{ cursor: 'pointer' }}
+                        />
+                        {activeDropdown === 'season' && (
+                            <div className="eu-dropdown-list">
+                                <div className="eu-dropdown-item" onClick={() => { setSeason('All'); setActiveDropdown(null); }}>All Seasons</div>
+                                <div className="eu-dropdown-item" onClick={() => { setSeason('Summer'); setActiveDropdown(null); }}>Summer</div>
+                                <div className="eu-dropdown-item" onClick={() => { setSeason('Winter'); setActiveDropdown(null); }}>Winter</div>
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -504,13 +548,47 @@ const EditUniform = () => {
                     <div className="eu-form-group">
                         <label>Class Range</label>
                         <div className="eu-range-wrapper">
-                            <select className="eu-select" value={classMin} onChange={e => setClassMin(e.target.value)}>
-                                {CLASS_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-                            </select>
+                            {/* CUSTOM DROPDOWN: CLASS MIN */}
+                            <div style={{ position: 'relative', flex: 1 }} ref={classMinWrapperRef}>
+                                <input 
+                                    className="eu-input" 
+                                    readOnly 
+                                    value={getClassLabel(classMin)} 
+                                    onClick={() => toggleDropdown('classMin')}
+                                    style={{ cursor: 'pointer' }}
+                                />
+                                {activeDropdown === 'classMin' && (
+                                    <div className="eu-dropdown-list">
+                                        {CLASS_OPTIONS.map(o => (
+                                            <div key={o.value} className="eu-dropdown-item" onClick={() => { setClassMin(o.value); setActiveDropdown(null); }}>
+                                                {o.label}
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                            
                             <span className="range-sep">to</span>
-                            <select className="eu-select" value={classMax} onChange={e => setClassMax(e.target.value)}>
-                                {CLASS_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-                            </select>
+                            
+                            {/* CUSTOM DROPDOWN: CLASS MAX */}
+                            <div style={{ position: 'relative', flex: 1 }} ref={classMaxWrapperRef}>
+                                <input 
+                                    className="eu-input" 
+                                    readOnly 
+                                    value={getClassLabel(classMax)} 
+                                    onClick={() => toggleDropdown('classMax')}
+                                    style={{ cursor: 'pointer' }}
+                                />
+                                {activeDropdown === 'classMax' && (
+                                    <div className="eu-dropdown-list">
+                                        {CLASS_OPTIONS.map(o => (
+                                            <div key={o.value} className="eu-dropdown-item" onClick={() => { setClassMax(o.value); setActiveDropdown(null); }}>
+                                                {o.label}
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
                     <div className="eu-form-group">

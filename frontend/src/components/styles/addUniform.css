@@ -11,7 +11,7 @@
   font-family: "Segoe UI", sans-serif;
   color: #333;
 
-  margin-left: 20px;
+  margin-left: 0;
   border-top-left-radius: 16px;
   border-bottom-left-radius: 16px;
 }
@@ -82,7 +82,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end; /* Pushes inputs to bottom alignment */
+  /* justify-content: flex-end; -- Removed to fix alignment drift */
 }
 
 .au-form-group label {
@@ -109,8 +109,10 @@
   font-size: 0.95rem;
   transition: all 0.2s;
   background: #fff;
-  display: flex;
-  align-items: center;
+  /* display: flex; REMOVED: Non-standard for inputs */
+  /* align-items: center; REMOVED */
+  margin: 0; /* Reset default margins */
+  margin-top: auto; /* Push to bottom of form group for alignment */
 }
 
 .au-input:focus,

@@ -76,7 +76,8 @@ const SchoolDashboard = () => {
 
   // --- 4. DERIVED FILTERS ---
   // --- 4. DERIVED FILTERS ---
-  const getClassString = (u) => `${u.class.start}-${u.class.end}`;
+  // --- 4. DERIVED FILTERS ---
+  const getClassString = (u) => `${u.class.start}_${u.class.end}`; // FIXED: Use underscore to support negatives
 
   const formatClassLabel = (val) => {
     if (val === -3) return 'Pre-Nursery';
@@ -108,7 +109,7 @@ const SchoolDashboard = () => {
   const getDisplayClass = (u) => formatClassRange(u.class.start, u.class.end);
 
   const formatRangeFromKey = (key) => {
-     const [s, e] = key.split('-').map(Number);
+     const [s, e] = key.split('_').map(Number); // FIXED: Split by underscore
      return formatClassRange(s, e);
   };
 
