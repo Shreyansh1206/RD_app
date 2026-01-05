@@ -7,6 +7,8 @@ A production-grade, full-stack application architected for managing complex scho
 ![Frontend](https://img.shields.io/badge/Frontend-React_19_%7C_Vite-61dafb)
 ![Backend](https://img.shields.io/badge/Backend-Node_%7C_Express_5_%7C_Vercel-339933)
 
+Currently hosted publically at rastogidresses.vercel.app
+
 ## 🌟 Executive Summary
 
 This application solves the problem of managing thousands of uniform variants (sizes, seasons, types) across multiple schools with varying pricing rules. It introduces a **"Smart Pricing Engine"** that allows for both global template-based pricing and granular, school-specific overrides.
