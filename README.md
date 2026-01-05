@@ -7,7 +7,7 @@ A production-grade, full-stack application architected for managing complex scho
 ![Frontend](https://img.shields.io/badge/Frontend-React_19_%7C_Vite-61dafb)
 ![Backend](https://img.shields.io/badge/Backend-Node_%7C_Express_5_%7C_Vercel-339933)
 
-Currently hosted publically at rastogidresses.vercel.app
+Currently hosted publically at [https://rastogidresses.vercel.app](https://rastogidresses.vercel.app)
 
 ## 🌟 Executive Summary
 
